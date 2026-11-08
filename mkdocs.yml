@@ -1,0 +1,88 @@
+site_name: HUZA Docs
+site_description: How HUZA works, how it is built, and how to run it.
+
+theme:
+  name: material
+  font:
+    text: Google Sans Flex
+    code: Roboto Mono
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - toc.follow
+    - content.code.copy
+
+extra_css:
+  - stylesheets/extra.css
+  - stylesheets/polish.css
+
+extra_javascript:
+  - javascripts/home-link.js
+  - javascripts/toc.js  
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+copyright: Built by Team Athena at AkiraChix
+
+nav:
+  - Home: [index.md, overview.md]
+  - System architecture: architecture.md
+  - Backend:
+      - Overview: backend/index.md
+      - Local setup: backend/local-setup.md
+      - Data model: backend/data-model.md
+      - API reference: backend/api-reference.md
+      - Payments: backend/payments.md
+      - Admin metrics: backend/admin-metrics.md
+      - Security: backend/security.md
+      - Testing: backend/testing.md
+      - Deployment: backend/deployment.md
+  - Frontend:
+      - Overview: frontend/index.md
+      - Mobile app: frontend/mobile-app.md
+      - Web app (PWA): frontend/pwa.md
+      - Admin dashboard: frontend/admin-dashboard.md
+      - Informational website: frontend/informational-website.md
+  - Reference:
+      - Overview: reference/index.md
+      - Glossary: reference/glossary.md
+      - Decisions: reference/decisions.md
+      - Team: reference/team.md
+      - Project links: reference/project-links.md
+      - About these docs: reference/about-the-docs.md
+      - Project links: reference/project-links.md
