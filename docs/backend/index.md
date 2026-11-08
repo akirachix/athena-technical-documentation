@@ -56,7 +56,7 @@ Each step has one job. This keeps the rules in one place, so the apps never need
 | `core/` | Settings and shared tools |
 | `tests/` | The automated tests |
 
-`main.py`, `database.py` and `dependencies.py` sit at the root of the project.
+`main.py` and `database.py` sit at the root of the project. `dependencies.py` is in `core/`.
 
 ## 3. Configuration
 
@@ -67,9 +67,9 @@ The backend reads its settings from a `.env` file on your computer and from serv
 | `DATABASE_URL` | The address of the PostgreSQL database |
 | `JWT_SECRET` | A long random secret used to sign sign-in tokens |
 | `ADMIN_INVITE_CODE` | At least 16 characters. Staff need it to create an account |
-| `CORS_ORIGINS` | The web addresses allowed to call the API, such as the dashboard |
-
-If the dashboard shows a network error in the browser, its address is usually missing from `CORS_ORIGINS`.
+| `ENVIRONMENT` | development, test or production |
+| `MPESA_` settings | The payment values. See [Payments](payments.md) |
+| `BREVO_API_KEY` and `EMAIL_FROM` | Send the verification and reset emails |
 
 ## 4. Pages in this section
 

@@ -45,17 +45,17 @@ HUZA has three apps and a public website. All of them talk to the same [backend]
 | Mobile app | `athena-mobile` | `flutter run` | On the emulator or phone |
 | Web app (PWA) | `athena-frontend` | `npm run dev` | http://localhost:3000 |
 | Admin dashboard | `athena-dashboard` | `npm run dev` | http://localhost:3001 |
-| Informational website | `athena-informational-website` | `npm run dev` | http://localhost:3000 |
+| Informational website | `athena-informational-website` | `npm run dev` | http://localhost:3000, or the next free port |
 
 Run the [backend](../backend/local-setup.md) first. Each app's page has its full setup steps.
 
 ## Security in the frontend
 
 - Never put secrets or API keys in an app. Anything in the app can be read by the person using it.
-- The sign-in token is handled in one place in each app, and nothing else reads or writes it.
+- The sign-in token is handled in one place in each app and nothing else reads or writes it.
 - Do not log tokens or personal data.
 - Contact details are shown only after an enquiry is accepted. The backend enforces this and the apps must not work around it.
-- Keep every hosted app on HTTPS, and add its address to `CORS_ORIGINS` on the backend.
+- Keep every hosted app on HTTPS.
 
 The rules the backend enforces are on [Backend security](../backend/security.md).
 

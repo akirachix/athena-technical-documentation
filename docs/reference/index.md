@@ -24,7 +24,7 @@ Quick facts and background for the whole project.
 
     ---
 
-    Who builds what, where the code lives, and the team rules.
+    Who builds what, where the code lives and the team rules.
 
     [:octicons-arrow-right-24: Meet the team](team.md)
 

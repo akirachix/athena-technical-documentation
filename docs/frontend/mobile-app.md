@@ -1,6 +1,6 @@
 # Mobile app
 
-The HUZA mobile app is a Flutter app for **suppliers and buyers**. Suppliers post by-products and buyers explore listings, send enquiries and pay with MTN MoMo.
+The HUZA mobile app is a Flutter app for **suppliers and buyers**. Suppliers post by-products and buyers explore listings, send enquiries.
 
 | Item | Details |
 |---|---|
@@ -9,7 +9,7 @@ The HUZA mobile app is a Flutter app for **suppliers and buyers**. Suppliers pos
 | Stack | Flutter, Dart (SDK ^3.13.5) |
 | State | provider |
 | Networking | dio |
-| Talks to | The HUZA backend API (FastAPI) |
+| Platforms | Android, iOS, web, Linux, macOS and Windows folders |
 
 ## Preview
 
@@ -23,7 +23,7 @@ The HUZA mobile app is a Flutter app for **suppliers and buyers**. Suppliers pos
 
 ## Local setup
 
-Requirements: Flutter SDK matching `pubspec.yaml`, Android Studio or Xcode, and an emulator or a phone.
+Requirements: Flutter SDK matching `pubspec.yaml`, Android Studio or Xcode and an emulator or a phone.
 
 ```bash
 git clone <athena-mobile repository URL>
@@ -44,16 +44,14 @@ flutter run
 | `dart format .` | Format the code |
 | `flutter build apk` | Build an Android package |
 
-On the Android emulator, the computer's localhost is `10.0.2.2`, not `127.0.0.1`.
-
 ## How the app works
 
 1. `lib/main.dart` starts the app and applies the theme from `lib/core/theme/`.
 2. `lib/app/app_shell.dart` is the main layout with bottom navigation.
 3. Each feature lives in `lib/features/<feature>/`.
 4. Screens in `presentation/` show the UI. They read state from a **viewmodel** or controller through `provider`.
-5. The viewmodel calls a **repository** in `data/`. The repository uses `dio` to call the API.
-6. Repositories turn API responses into **domain** models used by the screens.
+5. The viewmodel calls a **repository** in `data/`. The repositories use `dio` for network calls.
+6. Repositories turn responses into **domain** models used by the screens.
 
 ```mermaid
 %%{init: {"flowchart": {"padding": 6, "nodeSpacing": 30, "rankSpacing": 40}, "themeVariables": {"fontSize": "14px"}}}%%
@@ -61,7 +59,7 @@ flowchart LR
     Screen[Screen] --> VM[Viewmodel / controller]
     VM --> Repo[Repository]
     Repo --> Dio[dio]
-    Dio --> API[HUZA backend API]
+    Dio --> Net[Network calls]
     Repo --> Model[Domain model]
     Model --> VM
 ```
@@ -78,7 +76,7 @@ flowchart LR
 | `lib/core/features/` | Shared screens: explore and listing details |
 | `lib/features/dashboard/` | Dashboard (data, domain, viewmodels, presentation) |
 | `lib/features/processor_explore/` | Explore listings for processors |
-| `lib/features/payment/` | Buyer payment flow, seller payment screens, controller, repository |
+| `lib/features/payment/` | Payment flow, controller and repository |
 | `lib/features/registration/` | Sign up (domain, presentation) |
 | `lib/features/profile/` | Profile (data, domain, presentation) |
 | `lib/features/notifications/` | Notifications (data, domain, presentation) |
@@ -94,7 +92,7 @@ flowchart LR
 |---|---|
 | flutter | UI framework |
 | provider | State management |
-| dio | HTTP calls to the API |
+| dio | Network calls |
 | google_fonts | Fonts |
 | image_picker | Photos for listings and profiles |
 | cupertino_icons | iOS style icons |
@@ -106,8 +104,8 @@ The app uses the Montserrat font from `assets/fonts/`.
 ## Coding standards
 
 - One folder per feature, with `data`, `domain`, `presentation` and `viewmodels` where they are needed.
-- Screens contain UI only. No API calls inside widgets.
-- Repositories own all `dio` calls.
+- Screens contain UI only. No network calls inside widgets.
+- Repositories own the network calls.
 - Use colours and text styles from `lib/core/theme/`. Do not hard-code them.
 - Reuse widgets from `lib/core/widgets/` before making new ones.
 - File names are `snake_case`. Classes are `PascalCase`.
@@ -116,7 +114,7 @@ The app uses the Montserrat font from `assets/fonts/`.
 ## How to add or change a feature
 
 1. Create `lib/features/<feature>/` with `data`, `domain`, `presentation` and `viewmodels`.
-2. Define the domain model, then the repository that calls the API.
+2. Define the domain model, then the repository.
 3. Add a viewmodel that holds loading, data and error state.
 4. Build the screen and connect it with `provider`.
 5. Add the screen to `app_shell.dart` if it needs a menu entry.
@@ -126,9 +124,7 @@ The app uses the Montserrat font from `assets/fonts/`.
 ## Security
 
 - Never put secrets or API keys in the app. It can be unpacked.
-- Store the access token safely and send it only to the HUZA API.
 - Do not print tokens or personal data in logs.
-- Phone numbers for MTN MoMo are sent to the backend only. The app never talks to MTN directly.
 - Contact details are shown only after an enquiry is accepted. The backend enforces this.
 
 ## Testing
@@ -137,20 +133,18 @@ The app uses the Montserrat font from `assets/fonts/`.
 flutter test
 ```
 
-Test viewmodels and repositories first. Use widget tests for screens with several states: loading, data, empty and error.
+The tests are in `test/`: the payment controller, the dashboard screen and a widget test. Test viewmodels and repositories first. Use widget tests for screens with several states: loading, data, empty and error.
 
 ## Deployment
 
 - Android: `flutter build apk` or `flutter build appbundle`, then upload to Google Play.
 - iOS: `flutter build ipa`, then upload through App Store Connect.
-- The API URL must point to the hosted backend for release builds. See [Backend deployment](../backend/deployment.md).
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
 | `flutter pub get` fails | Check the Flutter version against `pubspec.yaml` and run `flutter doctor` |
-| App cannot reach the API on the emulator | Use `10.0.2.2` instead of `127.0.0.1` |
 | Fonts look wrong | Check the font files exist in `assets/fonts/` and are listed in `pubspec.yaml` |
 | Image picker does nothing on a phone | Check camera and photo permissions in the Android and iOS settings |
 | Strange build errors | Run `flutter clean` then `flutter pub get` |
@@ -166,4 +160,4 @@ Test viewmodels and repositories first. Use widget tests for screens with severa
 
 ## Summary
 
-The mobile app is a Flutter app organised by feature. Screens talk to viewmodels through provider, viewmodels use repositories, and repositories call the API with dio.
+The mobile app is a Flutter app organised by feature. Screens talk to viewmodels through provider, viewmodels use repositories and repositories use dio for network calls.

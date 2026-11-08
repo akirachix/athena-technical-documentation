@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The live reference is the Swagger page of the running API. It is always up to date, and you can try every endpoint from it.
+The live reference is the Swagger page of the running API. It is always up to date and you can try every endpoint from it.
 
 - Hosted: [huza-2fb08e00b606.herokuapp.com/docs](https://huza-2fb08e00b606.herokuapp.com/docs)
 - Local: `http://127.0.0.1:8000/docs`
@@ -87,8 +87,10 @@ If login answers `401`, that account does not exist on that server. The hosted a
 | GET | `/businesses/{business_id}` | A business's public details |
 | GET | `/price-guides` | List price guides |
 | GET | `/price-guides/lookup` | Find the guide for a material |
+| GET | `/price-guides/{guide_id}` | One price guide |
 | POST, PATCH, DELETE | `/price-guides` | Staff manage guides |
 | GET | `/notifications` | My notifications |
+| GET | `/notifications/{notification_id}` | One notification |
 | GET | `/notifications/unread-count` | How many are unread |
 | POST | `/notifications/read-all` | Mark all as read |
 | PATCH | `/notifications/{notification_id}/read` | Mark one as read |
@@ -107,7 +109,9 @@ If login answers `401`, that account does not exist on that server. The hosted a
 | GET | `/admin/users` | List users |
 | POST | `/admin/users/{user_id}/unlock` | Unlock a locked account |
 | GET | `/admin/payments` | List payments |
-| POST | `/admin/payments/{payment_id}/reconcile` | Match a payment with the mobile money provider |
+| POST | `/admin/payments/{payment_id}/reconcile` | Match a payment with M-Pesa |
+| POST | `/admin/payments/sweep` | Match every pending payment with M-Pesa |
+| GET | `/admin/payments/{payment_id}/events` | Steps a payment went through |
 | POST | `/admin/payments/{payment_id}/refund` | Refund |
 | POST | `/admin/payments/{payment_id}/payout` | Send the payout |
 | GET | `/admin/overview` | Counts for the overview page |
@@ -115,7 +119,7 @@ If login answers `401`, that account does not exist on that server. The hosted a
 | POST | `/admin/listings/{listing_id}/remove` | Remove a listing |
 | GET | `/admin/enquiries` | All enquiries |
 
-The overview, listings, remove and enquiries endpoints belong to the admin metrics feature, together with the metrics endpoints described on the [Admin metrics](admin-metrics.md) page and staff sign-up. If one is missing on the hosted Swagger page, that feature has not been deployed there yet.
+The overview, listings, remove and enquiries endpoints belong to the admin metrics feature, together with the metrics endpoints described on the [Admin metrics](admin-metrics.md) page.
 
 ### Health
 

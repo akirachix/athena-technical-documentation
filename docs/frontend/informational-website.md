@@ -1,6 +1,6 @@
 # Informational website
 
-The informational website is the public face of HUZA. It tells visitors what HUZA is, why it matters, and how to get in touch.
+The informational website is the public face of HUZA. It tells visitors what HUZA is, why it matters and how to get in touch.
 
 The live website is at [athena-informational-website.vercel.app](https://athena-informational-website.vercel.app/){ target=_blank }.
 
@@ -8,7 +8,7 @@ The live website is at [athena-informational-website.vercel.app](https://athena-
 |---|---|
 | Repository | `athena-informational-website` |
 | Stack | Next.js 16, React 19, TypeScript, Tailwind CSS 4 |
-| Talks to | Nothing yet. It is a static, public site |
+| Talks to | Web3Forms, which receives the contact form messages |
 
 ## Preview
 
@@ -33,7 +33,7 @@ The live website is at [athena-informational-website.vercel.app](https://athena-
 | How it works | Four steps: List, Match, Agree, Reuse |
 | Value chain | Material generators, collection and logistics, recyclers and processors, downstream buyers |
 | Why it matters | Less waste, new income, local supply |
-| Contact | Form to sell or find materials, and the footer with contact details |
+| Contact | Form to sell or find materials and the footer with contact details |
 
 ## Local setup
 
@@ -48,7 +48,7 @@ npm run dev
 
 Open http://localhost:3000.
 
-The site has no `.env` file and needs no environment variables today.
+Create a `.env.local` file and set `NEXT_PUBLIC_WEB3FORMS_KEY` to your Web3Forms access key. The contact form needs it to send messages. Do not commit `.env.local`.
 
 ### Scripts
 
@@ -123,8 +123,8 @@ The site has no `.env` file and needs no environment variables today.
 
 ## Security
 
-- Do not put secrets or API keys in the site. Everything in it is public.
-- The contact form must not store or show other people's details. Check where it sends messages before going live.
+- Do not put private secrets in the site. Everything in it is public.
+- The contact form sends messages to Web3Forms. `NEXT_PUBLIC_WEB3FORMS_KEY` is visible in the browser, so use a key that is meant to be public.
 - Keep the site on HTTPS.
 - Do not add tracking tools without the team agreeing.
 
@@ -144,7 +144,7 @@ npm run build
 npm run start
 ```
 
-The hosting place is not confirmed yet. Next.js sites can be hosted on Vercel or on any Node host. Once the team chooses, record it on the [Backend deployment](../backend/deployment.md) page.
+The website is hosted on Vercel at [athena-informational-website.vercel.app](https://athena-informational-website.vercel.app/).
 
 ## Troubleshooting
 
@@ -167,4 +167,4 @@ The hosting place is not confirmed yet. Next.js sites can be hosted on Vercel or
 
 ## Summary
 
-The informational website is a small Next.js site built from shared components. It is public, needs no environment variables, and is checked by lint, build and a manual walk-through until automated tests are added.
+The informational website is a small Next.js site built from shared components. It is public, sends its contact form through Web3Forms and is checked by lint, build and a manual walk-through until automated tests are added.

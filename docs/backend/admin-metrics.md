@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-Admin metrics help HUZA staff see how the marketplace is doing while the pilot runs. They are for staff only. A business account cannot open them, and the API answers 403 if it tries.
+Admin metrics help HUZA staff see how the marketplace is doing while the pilot runs. They are for staff only. A business account cannot open them and the API answers 403 if it tries.
 
 The numbers appear on the admin dashboard. The backend provides them through the endpoints below.
 
@@ -10,8 +10,8 @@ The numbers appear on the admin dashboard. The backend provides them through the
 
 | View | The question it answers |
 | --- | --- |
-| Exchange outcomes | How do enquiries end, and how much money moves? |
-| Marketplace health | Is the marketplace active, and are suppliers answering? |
+| Exchange outcomes | How do enquiries end and how much money moves? |
+| Marketplace health | Is the marketplace active and are suppliers answering? |
 | Pilot learning | What is the pilot teaching us, such as why exchanges fail? |
 
 ## 3. Endpoints
@@ -49,11 +49,3 @@ On the dashboard, these two filters are the date range and the stream picker abo
 Staff accounts are created with an invite code, so only people HUZA trusts can join. The code is set on the server as `ADMIN_INVITE_CODE` and must be at least 16 characters long.
 
 See [Admin dashboard](../frontend/admin-dashboard.md) and [Backend security](../backend/security.md).
-
-## 6. Hosted API status
-
-These endpoints, together with staff sign-up, ship in the admin metrics feature. If they are missing on the hosted Swagger page, that feature has not been deployed there yet. Until then, use a local backend to try them.
-
-## 7. Try it in Postman
-
-The team has a Postman collection for these endpoints. It covers staff sign-up, the staff pages and the three metrics views, with their filters and the error cases. Import it into Postman, set the `base_url` and run the collection.

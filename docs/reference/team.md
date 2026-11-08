@@ -9,7 +9,7 @@ HUZA is built by Team Athena at AkiraChix.
 | Angela | Account registration, login and profile. Mobile money payment |
 | Glory | Business approval and account status. Search, filters and location. Notifications |
 | Faith | Raw material listings. Processed product listings |
-| Fatma | Enquiries, messaging and acceptance. Exchange tracking |
+| Fatma | Enquiries and acceptance. Exchange tracking |
 | Walusungu | User dashboard and activity. Admin functions |
 
 ## Repositories

@@ -1,6 +1,6 @@
 # Web app (PWA)
 
-The HUZA web app is an installable Progressive Web App for **processors**. It lets a processor browse raw by-products from suppliers, open enquiries, manage their own listings, and follow payments and notifications.
+The HUZA web app is a React web app for **processors**. It lets a processor browse raw by-products from suppliers, open enquiries, manage their own listings and follow notifications.
 
 | Item | Details |
 |---|---|
@@ -16,7 +16,7 @@ The HUZA web app is an installable Progressive Web App for **processors**. It le
 
 ## Local setup
 
-Requirements: Node.js (current LTS) and npm. The backend should be running on `127.0.0.1:8000` if you want real data.
+Requirements: Node.js (current LTS) and npm. The backend should be running if you want real data.
 
 ```bash
 git clone <athena-frontend repository URL>
@@ -28,7 +28,7 @@ npm run dev
 
 Open http://localhost:3000.
 
-Do not commit `.env`. Only `.env.example` lives in git.
+In `.env`, remove the `#` in front of `VITE_API_URL` and set it to the backend address. The app needs this value to start. Do not commit `.env`. Only `.env.example` lives in git.
 
 ### Scripts
 
@@ -41,10 +41,6 @@ Do not commit `.env`. Only `.env.example` lives in git.
 | `npm run format:check` | Check formatting without changing files |
 | `npm test` | Run the Vitest tests once |
 
-### Using the local backend through the proxy
-
-`vite.proxy.config.ts` extends the base Vite config and proxies every request starting with `/api` to `http://127.0.0.1:8000`, removing the `/api` prefix. This avoids CORS problems in development. It also allows ngrok hosts, which is useful for testing the PWA on a phone.
-
 ## How the app works
 
 1. `src/main.tsx` mounts `App.tsx`, which sets up React Router.
@@ -53,7 +49,6 @@ Do not commit `.env`. Only `.env.example` lives in git.
 4. Each feature has its own pages and a **repository** file. The repository is the only place that calls the API.
 5. `src/config/api.ts` holds the API base URL, so no page hard-codes a URL.
 6. Forms use React Hook Form with validation in a `validation.ts` file.
-7. The app is a PWA through `vite-plugin-pwa`, so it can be installed on a phone or laptop.
 
 ```mermaid
 %%{init: {"flowchart": {"padding": 6, "nodeSpacing": 30, "rankSpacing": 40}, "themeVariables": {"fontSize": "14px"}}}%%
@@ -81,7 +76,6 @@ flowchart LR
 | `src/assets/sample/` | Sample images used in the UI |
 | `src/setupTests.ts` | Test setup |
 | `vite.config.ts` | Vite, React, Tailwind and Vitest config |
-| `vite.proxy.config.ts` | Dev config with the `/api` proxy |
 | `docs/api/` | API notes for the app |
 | `workflow/ci.yml` | CI workflow |
 
@@ -97,7 +91,6 @@ flowchart LR
 | React Hook Form | Forms and validation |
 | Radix UI Dialog | Accessible dialogs |
 | lucide-react | Icons |
-| vite-plugin-pwa | Installable app and offline support |
 | Vitest and Testing Library | Tests |
 | oxlint and Prettier | Linting and formatting |
 
@@ -127,7 +120,7 @@ flowchart LR
 - The access token is handled only in `src/lib/authToken.ts`. Do not read or write it anywhere else.
 - Never put secrets in the app. Anything in `VITE_` variables ends up in the browser bundle.
 - Do not log tokens or personal data.
-- Contact details of a business are shown only after an enquiry is accepted. The backend enforces this, and the UI must not work around it.
+- Contact details of a business are shown only after an enquiry is accepted. The backend enforces this and the UI must not work around it.
 - Keep the API on HTTPS in production.
 
 ## Testing
@@ -152,10 +145,9 @@ This runs `tsc -b` and `vite build` and writes a static site to `dist/`. Host th
 
 | Problem | Fix |
 |---|---|
-| API calls fail with CORS errors | Run through the dev proxy, or add the app URL to `CORS_ORIGINS` on the backend |
-| `404` on API calls in dev | Check the backend is running on `127.0.0.1:8000` and the path starts with `/api` |
+| The app shows a blank page or says the API is not configured | Set `VITE_API_URL` in `.env` and restart the dev server |
+| API calls fail in the browser | Check that `VITE_API_URL` points to a running backend |
 | Signed out after refresh | Check the token helper in `src/lib/authToken.ts` and that the token has not expired |
-| Old version after deploy | Close all tabs so the service worker updates, or clear site data |
 | `npm ci` fails | Use the Node version the team uses and delete `node_modules` first |
 
 ## Definition of done
@@ -169,4 +161,4 @@ This runs `tsc -b` and `vite build` and writes a static site to `dist/`. Host th
 
 ## Summary
 
-The PWA is a React and Vite app organised by feature. Pages talk to the backend only through repositories, the dev proxy removes CORS trouble, and the build produces a static, installable site.
+The PWA is a React and Vite app organised by feature. Pages talk to the backend only through repositories and the build produces a static site.

@@ -1,8 +1,6 @@
 # Backend security
 
-Who can do what in HUZA, and how the backend keeps data safe.
-
-The full security design is drawn in the SSAD on the [System architecture](../architecture.md) page. This page lists the protections in the backend.
+Who can do what in HUZA and how the backend keeps data safe.
 
 ## 1. How a request is checked
 
@@ -15,9 +13,9 @@ Every request to the HUZA API says who is asking. The API reads the sign-in toke
 | Supplier | Manage their own business, raw material listings, enquiries and payments |
 | Processor | Manage their own business, finished product listings, enquiries and payments |
 | Buyer | Search finished products, send enquiries and pay |
-| Staff | Review businesses, remove listings, manage price guides, see all enquiries and payments, and see metrics |
+| Staff | Review businesses, remove listings, manage price guides, see all enquiries and payments and see metrics |
 
-A person can see and change only their own business. They cannot read another business's private messages.
+A person can see and change only their own business, listings, enquiries and payments. A person's phone number and email are shown to the other side only after the seller accepts the enquiry.
 
 ## 3. Business approval
 
@@ -53,40 +51,40 @@ Staff accounts can only be created with an invite code.
 | A wrong code is turned away | Only invited people join |
 | Change it if it is shared by mistake | The old one stops working |
 
-The team's plan also includes an extra MFA code for staff sign-in. Today, staff sign in with email and password.
-
 ## 6. Accounts and sessions
 
 - People sign in with their email and password. A phone number is only a contact detail.
-- Passwords are stored as hashes, never as plain text.
+- Passwords are stored as Argon2 hashes, never as plain text.
 - A new account must confirm its email address.
-- After too many wrong passwords, an account is locked. A staff member can unlock it.
-- Sessions use a token that expires. When it does, the person is asked to sign in again.
+- After 5 wrong passwords, an account is locked for 15 minutes. A staff member can unlock it sooner.
+- Sessions use a signed token that expires after 30 minutes. When it does, the person is asked to sign in again.
+- Signing out stops every token that person has, on every device.
+- Changing a password stops the older tokens.
 
 ## 7. Secrets
 
-Passwords, tokens, the invite code and the database address live in environment settings and in the untracked `.env` file. They are never committed to git and never pasted in screenshots.
+Passwords, tokens, the invite code, the payment keys and the database address live in environment settings and in the untracked `.env` file. They are never committed to git and never pasted in screenshots.
 
 | Setting | What it protects |
 | --- | --- |
-| `JWT_SECRET` | The sign-in tokens |
+| `JWT_SECRET` | The sign-in tokens. It must be at least 32 characters |
 | `ADMIN_INVITE_CODE` | Staff sign-up |
 | `DATABASE_URL` | The database |
+| `MPESA_` settings | The payment keys. See [Backend payments](payments.md) |
 
 If a secret is shared by mistake, change it. The old one stops working.
 
-## 8. Who may call the API
+## 8. Photos
 
-The backend only accepts requests from the web addresses listed in `CORS_ORIGINS`. If a browser shows a network error, check that the address is in that list.
+A listing can have up to 5 photos. Each one must be a JPEG, PNG or WEBP image of at most 5 MB. The server checks that the file is a real image, then saves it again as a smaller WEBP image.
 
-## 9. Private messages
+## 9. Payments
 
-Businesses message each other inside an enquiry. Contact details are shown only after the seller accepts, and staff cannot read the private messages.
+Every payment is tied to one enquiry and an enquiry can have only one successful payment. Money moves through M-Pesa and HUZA keeps its own record of the reference for every payment.
 
-## 10. Payments
+- M-Pesa reports back to a private address that carries a signed token, so only genuine reports are accepted.
+- One enquiry gets a limited number of payment tries, with a short wait between them.
+- Every step of a payment is saved as an event.
+- Staff can match payments with M-Pesa records, refund and send payouts.
 
-Every payment is tied to one enquiry, and an enquiry can have only one successful payment. Money moves through MTN Mobile Money, and HUZA keeps its own record of the reference for every payment. Staff can match payments with MoMo records, refund and send payouts. See [Backend payments](payments.md).
-
-## 11. Backups and recovery
-
-How the hosted database is backed up and restored is still to be confirmed by the team, and will be added here.
+See [Backend payments](payments.md).

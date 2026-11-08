@@ -10,7 +10,7 @@ hide:
 
 # Turn industrial by‑products into opportunity
 
-HUZA is a marketplace where businesses list leftover materials, and other businesses find them, agree on an exchange and pay for them in the app. These pages explain how it works and how we built it.
+HUZA is a marketplace where businesses list leftover materials and other businesses find them, agree on an exchange and pay for them in the app. These pages explain how it works and how we built it.
 
 [Read the overview](overview.md){ .md-button .md-button--primary }
 [See the architecture](architecture.md){ .md-button }
@@ -33,7 +33,7 @@ HUZA is a marketplace where businesses list leftover materials, and other busine
 
     ---
 
-    How the whole system fits together, and how it is kept secure.
+    How the whole system fits together and how it is kept secure.
 
     [:octicons-arrow-right-24: See the architecture](architecture.md)
 
@@ -86,8 +86,8 @@ Four material streams are on the platform today.
 
 1. A **supplier** lists a material with a quantity, a price and a place.
 2. A **buyer or processor** finds the listing and sends an enquiry.
-3. The supplier accepts, and both sides agree on collection outside the app.
-4. The buyer pays by mobile money in the app.
-5. The supplier is paid out, and the exchange is marked complete.
+3. The supplier accepts and both sides agree on collection outside the app.
+4. The buyer pays by M-Pesa in the app.
+5. The supplier is paid out and the exchange is marked complete.
 
-HUZA staff review every new business before it can trade, and they watch the marketplace through the admin dashboard.
+HUZA staff review every new business before it can trade and they watch the marketplace through the admin dashboard.

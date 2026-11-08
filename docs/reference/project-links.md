@@ -28,8 +28,6 @@ Everything the team has written and designed, in one place.
 
 | Document | Link |
 | --- | --- |
-| Security System Architecture Diagram (SSAD) | [Open](https://lucid.app/lucidchart/0c97e8b0-2709-4abd-bff7-5ea77cc0c70d/edit?invitationId=inv_fae7ffa3-eebb-4dd4-b239-88abc96094f7){ target=_blank } |
-| System Architecture Diagram (SAD) | [Open](https://lucid.app/lucidchart/5f256f9d-cbd2-4f95-b811-25bb6ce14b23/edit?viewport_loc=-3117%2C-7717%2C24600%2C16100%2C0_0&invitationId=inv_980794b1-cd17-4934-a7fe-e5e97aac6484){ target=_blank } |
 | Figma design | [Open](https://www.figma.com/design/sCW1cAffxC28jrymK0HivE/Athena?node-id=461-8&t=bKXIjVw06naBVJRx-1){ target=_blank } |
 | User flows (Figma board) | [Open](https://www.figma.com/board/6DlGnL3Z7Xi8V8R5ksSIgc/User-flows?node-id=163-793&t=P6jQAFzLH63xksJV-1){ target=_blank } |
 | Entity Relationship Diagram documentation | [Open](https://docs.google.com/document/d/1I0wC5WoO077yLc6YQZ1CztkYR1-IIeDnDFWT8jMjKbk/edit?usp=sharing){ target=_blank } |

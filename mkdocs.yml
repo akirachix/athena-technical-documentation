@@ -1,5 +1,6 @@
 site_name: HUZA Docs
-site_description: How HUZA works, how it is built, and how to run it.
+site_description: How HUZA works, how it is built and how to run it.
+site_url: https://akirachix.github.io/athena-technical-documentation/
 
 theme:
   name: material
@@ -85,4 +86,3 @@ nav:
       - Team: reference/team.md
       - Project links: reference/project-links.md
       - About these docs: reference/about-the-docs.md
-      - Project links: reference/project-links.md

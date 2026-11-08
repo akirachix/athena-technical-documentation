@@ -2,9 +2,9 @@
 
 ## Purpose of the Architecture
 
-HUZA connects businesses that have leftover industrial materials with businesses that can use them. The architecture shows how a listing, an enquiry and a payment move through the system, and who is allowed to do what at each step.
+HUZA connects businesses that have leftover industrial materials with businesses that can use them. The architecture shows how a listing, an enquiry and a payment move through the system and who is allowed to do what at each step.
 
-The main idea is one clear record for every exchange. A listing leads to an enquiry, an enquiry leads to an agreement, and an agreement leads to a payment. Nothing sits in separate places that cannot be connected.
+The main idea is one clear record for every exchange. A listing leads to an enquiry, an enquiry leads to an agreement and an agreement leads to a payment. Nothing sits in separate places that cannot be connected.
 
 ## System Architecture Diagram
 
@@ -14,24 +14,31 @@ The SAD is a high-level picture of how the parts of HUZA fit together. It shows 
 
 ![HUZA system architecture diagram](assets/sad.png)
 
-[Open the SAD in Lucidchart](https://lucid.app/lucidchart/5f256f9d-cbd2-4f95-b811-25bb6ce14b23/edit?viewport_loc=-3117%2C-7717%2C24600%2C16100%2C0_0&invitationId=inv_980794b1-cd17-4934-a7fe-e5e97aac6484){ target=_blank }
+
 
 ## Secure SSAD
 
 The SSAD adds the security view on top of the same system. It shows where users are checked, where data is kept and where the safety boundaries sit.
 
-- **Core focus:** who can do what, keeping business data safe, and keeping every payment traceable.
+- **Core focus:** who can do what, keeping business data safe and keeping every payment traceable.
 
 ![HUZA security architecture diagram](assets/ssad.png)
 
-[Open the SSAD in Lucidchart](https://lucid.app/lucidchart/0c97e8b0-2709-4abd-bff7-5ea77cc0c70d/edit?invitationId=inv_fae7ffa3-eebb-4dd4-b239-88abc96094f7){ target=_blank }
-The details are explained on the Security page.
+The details are on [Backend security](backend/security.md).
+
+### Security controls in the backend
+
+- **Roles:** every request is checked against the person's role and a business sees only its own data.
+- **Approval:** a business cannot trade until staff approve it.
+- **Sign-in:** passwords are stored as Argon2 hashes, tokens expire and an account is locked after repeated wrong passwords.
+- **Payments:** every payment is tied to one enquiry and M-Pesa reports back through a signed address.
+- **Photos:** each upload is checked and saved again as a smaller image.
 
 ## Components & Responsibilities
 
 | Component | Primary responsibility |
 | --- | --- |
-| Mobile app | Lets suppliers and buyers list materials, send enquiries and pay. |
+| Mobile app | Lets suppliers and buyers list materials and send enquiries. |
 | Web app (PWA) | Lets processors find materials and manage their enquiries. |
 | Admin dashboard | Lets staff approve businesses and watch listings, enquiries and metrics. |
 | HUZA API | Receives every request, checks who is asking, applies the rules and returns a response. |
@@ -43,7 +50,7 @@ The details are explained on the Security page.
 | Price guides | Gives suppliers a guide price for each material. |
 | Notifications | Tells users when something changes on their listing or enquiry. |
 | Database | Stores every record and the links between them. |
-| Mobile money provider | Moves the money when a buyer pays. |
+| M-Pesa | Moves the money when a buyer pays. |
 
 ## Data Flow
 
@@ -53,10 +60,10 @@ These are the steps of a full exchange:
 - **Approval:** the business waits as Pending until staff approve it. Staff can also reject or suspend a business.
 - **Listing:** an approved supplier lists a material with a quantity, a price and a place.
 - **Enquiry:** a buyer or processor finds the listing and sends an enquiry. The enquiry starts with the status Enquiry.
-- **Agreement:** the supplier accepts, and the status becomes Agreed. Collection is arranged between the two businesses, outside the app.
+- **Agreement:** the supplier accepts and the status becomes Agreed. Collection is arranged between the two businesses, outside the app.
 - **Payment:** the buyer pays in the app. When the payment is confirmed, the status becomes Paid.
 - **Completion:** the exchange is marked Completed.
-- **Failure:** if the exchange stops, it becomes Cancelled or Unsuccessful, and a reason is recorded.
+- **Failure:** if the exchange stops, it becomes Cancelled or Unsuccessful and a reason is recorded.
 - **Monitoring:** staff watch all of this through the admin dashboard and its metrics.
 
 ## Architecture Layers
@@ -78,11 +85,11 @@ Suppliers and buyers use the mobile app to:
 
 **Example:** a carpenter lists a bag of sawdust with a price and a pickup place. A farm nearby sees it and sends an enquiry.
 
-The mobile app talks to the HUZA API. It never writes to the database directly. This keeps the rules and the access checks in one place.
+The apps never write to the database directly. The HUZA API keeps the rules and the access checks in one place.
 
 #### 1.2 Web app (PWA)
 
-Processors use the web app to find materials in bulk and to manage their enquiries from a computer or a phone browser.
+Processors use the web app to find materials in bulk and to manage their listings and enquiries from a computer or a phone browser.
 
 #### 1.3 Admin dashboard
 
@@ -90,7 +97,6 @@ Staff use the admin dashboard to:
 
 - Approve, reject or suspend businesses.
 - View all listings and enquiries.
-- View payments.
 - Watch marketplace metrics with date filters.
 
 **Example:** a new supplier signs up. Staff open the approvals page, check the business and approve it. Only then can the supplier list materials.
@@ -102,7 +108,7 @@ The HUZA API is a FastAPI server. Every request goes through the same steps: che
 | Part | What it does |
 | --- | --- |
 | Routes | Receive requests and send responses. |
-| Schemas | Check that incoming data has the right shape, and shape the data that goes out. |
+| Schemas | Check that incoming data has the right shape and shape the data that goes out. |
 | Role checks | Allow or refuse an action depending on the user's role. |
 | Services | Hold the business rules, such as which status can follow which. |
 | Database access | Reads and writes records through SQLAlchemy. |
@@ -120,7 +126,7 @@ HUZA keeps its records in a PostgreSQL database. Database changes are managed wi
 | Location | A place where materials are found | A town or area |
 | Listing | A material offer | 200 kg of sawdust at a set price |
 | Enquiry | An exchange and its status | A buyer asking about that sawdust |
-| Payment | A payment linked to an enquiry | The buyer's mobile money payment |
+| Payment | A payment linked to an enquiry | The buyer's M-Pesa payment |
 
 #### 3.2 Why relationships matter
 
@@ -128,9 +134,9 @@ A payment points to the enquiry it paid for. The enquiry points to the listing. 
 
 ### 4. Integration layer
 
-#### 4.1 Mobile money provider
+#### 4.1 M-Pesa
 
-When a buyer pays, HUZA asks the mobile money provider to take the payment. The provider reports back, and HUZA then updates the payment and the enquiry.
+When a buyer pays, HUZA asks M-Pesa to take the payment. M-Pesa reports back and HUZA then updates the payment and the enquiry.
 
 #### 4.2 Hosting
 
@@ -204,11 +210,11 @@ The field names above show the shape of a request. The exact names are in the AP
 flowchart LR
     A[Buyer sends enquiry] --> B[Supplier accepts]
     B --> C[Buyer pays]
-    C --> D[Provider confirms the payment]
+    C --> D[M-Pesa confirms the payment]
     D --> E[Enquiry becomes Paid]
     E --> F[Exchange is Completed]
     A --> G[Cancelled or Unsuccessful]
     B --> G
 ```
 
-When an exchange fails, HUZA records one reason: price, quality, transport, quantity, no partner found or payment. These reasons feed the admin metrics, so staff can see why exchanges fail and what to improve.
+When an exchange fails, HUZA records one reason: no partner found, quality, price, transport, quantity, trust, payment, declined or other. These reasons feed the admin metrics, so staff can see why exchanges fail and what to improve.

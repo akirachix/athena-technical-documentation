@@ -24,7 +24,7 @@ uv run ruff format .
 
 ## 4. Test settings
 
-The tests use their own settings, so they never touch your real database. The payment settings need placeholder values, and the test setup provides them.
+The tests use their own settings, so they never touch your real database. The payment settings need placeholder values and the test setup provides them.
 
 !!! warning "Keep test settings out of your terminal"
     If your terminal still has `DATABASE_URL` set to a test database, the server will use it. Open a fresh terminal for normal work.
@@ -40,20 +40,11 @@ The tests use their own settings, so they never touch your real database. The pa
 | Admin metrics | Each view, each filter, bad values |
 | Access | A business account is not allowed on staff pages |
 
-## 6. Postman
-
-The Postman collection checks the running server from the outside. Use it after a change to see the real answers.
-
-1. Start the server.
-2. Import the collection and the environment.
-3. Set the invite code and the base address.
-4. Run the collection.
-
-## 7. Before you push
+## 6. Before you push
 
 1. Run `uv run ruff format .`
 2. Run `uv run ruff check .`
 3. Run `uv run pytest`
 4. Fix anything red, then push.
 
-When you add a feature, add its tests in the same pull request, and check that the new code is covered by at least one test.
+When you add a feature, add its tests in the same pull request and check that the new code is covered by at least one test.

@@ -5,7 +5,6 @@
 | Admin metrics | Staff-only numbers about how the marketplace and the pilot are doing |
 | Approval | Staff checking a new business before it can trade |
 | Buyer | A business that searches for and buys finished products |
-| CORS | The rule that decides which website addresses may call the API |
 | Dashboard | The staff web app |
 | Endpoint | One address on the API that does one job, such as listing enquiries |
 | Enquiry | A request about a listing, which moves through statuses until it is completed or closed |
@@ -15,7 +14,7 @@
 | Invite code | The secret code needed to create a staff account |
 | Listing | Material or a product that a business offers, with a quantity, a price and a place |
 | Migration | A saved change to the database tables |
-| MTN MoMo | MTN Mobile Money, the service used to pay and to be paid out |
+| M-Pesa | The mobile money service used to pay and to be paid out |
 | Payout | The supplier's share, sent after the buyer's payment |
 | Pilot | The first, small run of HUZA, used to learn what is really needed |
 | Price guide | The normal price range for a material, grade and district |

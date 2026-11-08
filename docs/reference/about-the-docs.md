@@ -19,14 +19,14 @@ Open http://127.0.0.1:8001. The page refreshes when you save a file.
 
 ## 3. Publish
 
-1. Put the docs folder in its own repository.
-2. Push to `main`. The workflow in `.github/workflows` builds the site and publishes it to the `gh-pages` branch.
-3. In the repository, open **Settings**, then **Pages**, and choose the `gh-pages` branch.
-4. The site appears at `https://akirachix.github.io/<repository-name>/`.
+1. Open a pull request into `main`. The workflow in `.github/workflows` builds the site to check it.
+2. When the pull request is merged, the same workflow builds the site and publishes it with GitHub Pages.
+3. In the repository, open **Settings**, then **Pages** and set the source to **GitHub Actions**. This is done once.
+4. The site appears at `https://akirachix.github.io/athena-technical-documentation/`.
 
 ## 4. Writing rules
 
-- Keep each page about one thing, and put it in the section it belongs to.
+- Keep each page about one thing and put it in the section it belongs to.
 - Use plain words and short sentences.
-- Say what is built today and what is planned.
+- Write about what is built today.
 - Never paste secrets, tokens or real `.env` values.

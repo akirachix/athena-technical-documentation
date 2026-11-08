@@ -20,8 +20,8 @@ The admin dashboard is the web app HUZA staff use to run the marketplace. Busine
 |---|---|
 | Overview | Counts of what needs attention, with links to each page |
 | Approvals | Review new businesses and approve or reject them with a reason |
-| Businesses | See every business, and suspend or restore one |
-| Listings | See what is visible to businesses, and remove a listing |
+| Businesses | See every business and suspend or restore one |
+| Listings | See what is visible to businesses and remove a listing |
 | Price guides | Add, edit or delete normal price ranges |
 | Enquiries | Follow every enquiry and its status |
 | Settings | Staff accounts and marketplace rules |
@@ -31,13 +31,13 @@ The admin dashboard is the web app HUZA staff use to run the marketplace. Busine
 
 ### Approvals and the tabs
 
-The approvals list has three tabs: Pending, Approved and Rejected. The chosen tab is saved in the page address, for example `/approvals?tab=APPROVED`. Clicking a row opens the business, and the back arrow returns to the same tab.
+The approvals list has three tabs: Pending, Approved and Rejected. The chosen tab is saved in the page address, for example `/approvals?tab=APPROVED`. Clicking a row opens the business and the back arrow returns to the same tab.
 
 ## Sign in and sign up
 
 ### Sign in
 
-Staff sign in with their email and password. The sign-in page also has a **Create account** link for new staff, and a link to reset a forgotten password. If the email or password is wrong, the page says so without saying which one.
+Staff sign in with their email and password. The sign-in page also has a **Create account** link for new staff and a link to reset a forgotten password. If the email or password is wrong, the page says so without saying which one.
 
 ### Create a staff account
 
@@ -46,7 +46,7 @@ Only people with an invite code can create a staff account. A current administra
 | Field | Notes |
 |---|---|
 | Full name | Required |
-| Work email | Required, and must not be used already |
+| Work email | Required and must not be used already |
 | Phone number | Starts with +254 |
 | Password | At least 8 characters with a number |
 | Confirm password | Must match |
@@ -75,7 +75,7 @@ The form sends `POST /auth/register-admin` with the full name, email, phone numb
 | 409 | Email already used |
 | 422 | A field is missing or in the wrong shape |
 
-The backend reads the code from the `ADMIN_INVITE_CODE` setting. It must be at least 16 characters, and it is a secret. See [Backend security](../backend/security.md) and [Backend deployment](../backend/deployment.md).
+The backend reads the code from the `ADMIN_INVITE_CODE` setting. It must be at least 16 characters and it is a secret. See [Backend security](../backend/security.md) and [Backend deployment](../backend/deployment.md).
 
 ## Local setup
 
@@ -109,7 +109,7 @@ Set `VITE_API_URL` in `.env` to the backend address. Do not commit `.env`.
 2. Staff sign in. The token is kept and a shared API client adds it to every request.
 3. If the token has expired, the dashboard signs the person out and asks them to sign in again.
 4. Each page loads only when opened, which keeps the first load fast.
-5. A page reads its data through a viewmodel, and the viewmodel uses a repository to call the API.
+5. A page reads its data through a viewmodel and the viewmodel uses a repository to call the API.
 
 ```mermaid
 %%{init: {"flowchart": {"padding": 6, "nodeSpacing": 30, "rankSpacing": 40}, "themeVariables": {"fontSize": "14px"}}}%%
@@ -122,16 +122,15 @@ flowchart LR
 
 ## Repository structure
 
-Each feature has its own folder under `src/features/`, such as `approvals`, `listings` or `enquiries`.
+Each feature has its own folder under `src/features/`, such as `approvals`, `listings` or `enquiries`. A small feature keeps its page and a repository file together. A larger feature, such as `approvals`, splits into these parts:
 
 | Part | What it does |
 |---|---|
 | `pages/` | The screen |
 | `components/` | Pieces used only by that feature |
 | `viewmodels/` | The logic behind the screen, such as loading and filtering |
-| `api/` or a repository file | Talks to the backend |
-| `types/` | The shapes of the data |
-| `__tests__/` | The tests, with a fake repository so they never call a real server |
+| `api/` | Talks to the backend |
+| `__tests__/` | The tests |
 
 Shared pieces live in `src/components/` and `src/lib/`.
 
@@ -144,6 +143,8 @@ Shared pieces live in `src/components/` and `src/lib/`.
 | Tailwind CSS 4 | Styling |
 | React Router | Moving between pages |
 | React Hook Form | Forms |
+| Recharts | The charts on the metrics pages |
+| Radix UI Dialog | Dialogs |
 | Vitest and Testing Library | Tests |
 | Prettier and oxlint | Formatting and style |
 
@@ -154,15 +155,15 @@ Shared pieces live in `src/components/` and `src/lib/`.
 - Only repositories and the `api` folder call the backend.
 - Reuse shared components before making new ones.
 - Style with Tailwind and the HUZA colours.
-- Write tests with a fake repository.
+- Write tests for each page and repository.
 - Run lint and format before every commit.
 
 ## How to add or change a feature
 
-1. Create `src/features/<feature>/` with `pages`, `viewmodels`, `api` and `__tests__`.
+1. Create `src/features/<feature>/` with the page, a repository file and a `__tests__` folder.
 2. Write the repository functions and types.
-3. Write the viewmodel with loading, data, empty and error states.
-4. Build the page and add its route and menu link.
+3. Keep loading, data, empty and error states in the page or a viewmodel.
+4. Build the page and add its route in `src/routes.tsx` and its menu link.
 5. Write tests for the viewmodel and the page.
 6. Run lint, format check, tests and build.
 7. Open a pull request using the team rules.
@@ -177,7 +178,7 @@ Shared pieces live in `src/components/` and `src/lib/`.
 
 ## Testing
 
-Tests use Vitest and Testing Library. Each feature has its own `__tests__` folder and uses a fake repository, so no test calls a real server.
+Tests use Vitest and Testing Library. Each feature has its own `__tests__` folder.
 
 ```bash
 npm test
@@ -192,7 +193,7 @@ npm test
 
 ### If the tests stall
 
-Stop the run, delete `node_modules`, run `npm ci` and try again. Check that no test is waiting on a real network call.
+Stop the run, delete `node_modules`, run `npm ci` and try again. Check that no test is waiting on a network call.
 
 ## Deployment
 
@@ -200,16 +201,15 @@ Stop the run, delete `node_modules`, run `npm ci` and try again. Check that no t
 npm run build
 ```
 
-This writes a static site to `dist/`. Host it on any static host over HTTPS. `VITE_API_URL` must be set when you build, and the dashboard address must be in `CORS_ORIGINS` on the backend. See [Backend deployment](../backend/deployment.md).
+This writes a static site to `dist/`. Host it on any static host over HTTPS. `VITE_API_URL` must be set when you build. See [Backend deployment](../backend/deployment.md).
 
 ## Troubleshooting
 
 | Problem | Fix |
 |---|---|
 | Blank page or network errors | Check `VITE_API_URL` and that the backend is running |
-| CORS errors | Add the dashboard address to `CORS_ORIGINS` on the backend |
 | Signed out suddenly | The token expired. Sign in again |
-| Staff sign-up is not open | The backend has no `ADMIN_INVITE_CODE`, or the sign-up endpoint is not deployed yet |
+| Staff sign-up is not open | The backend has no `ADMIN_INVITE_CODE` |
 | Changed `.env` but nothing changed | Restart the dev server. `VITE_` values are read at start and at build |
 
 ## Definition of done
@@ -223,4 +223,4 @@ This writes a static site to `dist/`. Host it on any static host over HTTPS. `VI
 
 ## Summary
 
-The admin dashboard is a React and Vite app organised by feature. It signs staff in with an invite-code sign-up, reads data through viewmodels and repositories, and gives staff one place to approve businesses and watch the marketplace.
+The admin dashboard is a React and Vite app organised by feature. It signs staff in with an invite-code sign-up, reads data through viewmodels and repositories and gives staff one place to approve businesses and watch the marketplace.

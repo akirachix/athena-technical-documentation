@@ -7,8 +7,9 @@ How to run the HUZA backend on your computer, create the first staff account and
 | You need | Notes |
 | --- | --- |
 | Git | And access to the akirachix repositories |
-| Python and uv | To run the backend |
-| PostgreSQL | Running on your computer |
+| Python 3.11 | The version the backend uses |
+| uv | Installs the packages |
+| PostgreSQL | Running on your computer, with an empty database for HUZA |
 
 ## 2. Run the backend
 
@@ -16,7 +17,8 @@ How to run the HUZA backend on your computer, create the first staff account and
 2. Install the packages:
 
     ```bash
-    uv sync
+    uv venv
+    uv pip install -r pyproject.toml --group dev
     ```
 
 3. Create a `.env` file in the project root with these settings:
@@ -24,20 +26,21 @@ How to run the HUZA backend on your computer, create the first staff account and
     | Setting | What it is |
     | --- | --- |
     | `DATABASE_URL` | The address of your PostgreSQL database |
-    | `JWT_SECRET` | A long random secret for tokens |
+    | `JWT_SECRET` | A long random secret of at least 32 characters, for tokens |
     | `ADMIN_INVITE_CODE` | At least 16 characters, for staff sign-up |
-    | `CORS_ORIGINS` | The web addresses that may call the API, for example `http://localhost:3001` |
+
+    Payment and email settings are only needed to try payments or emails. See [Backend payments](payments.md).
 
 4. Build the tables:
 
     ```bash
-    alembic upgrade head
+    uv run --no-sync alembic upgrade head
     ```
 
 5. Start the server:
 
     ```bash
-    uvicorn main:app --reload
+    uv run --no-sync uvicorn main:app --reload
     ```
 
 6. Open `http://127.0.0.1:8000/docs` to try the API.
@@ -50,9 +53,9 @@ How to run the HUZA backend on your computer, create the first staff account and
 
 ## 4. Before you push
 
-1. `uv run ruff format .`
-2. `uv run ruff check .`
-3. `uv run pytest`
+1. `uv run --no-sync ruff format .`
+2. `uv run --no-sync ruff check .`
+3. `uv run --no-sync pytest`
 
 All three must pass. See [Backend testing](testing.md) for what the tests cover.
 
@@ -63,6 +66,6 @@ All three must pass. See [Backend testing](testing.md) for what the tests cover.
 | "no such table" | The terminal still has a test database address set | Open a new terminal, or unset `DATABASE_URL` |
 | "column does not exist" | Your database is behind | Run `alembic upgrade head` |
 | "Address already in use" | A server is already running on that port | Stop the old one, then start again |
-| "Staff sign-up is not open right now" | No invite code is set, or the backend has no staff sign-up | Set `ADMIN_INVITE_CODE`, or use a backend that includes it |
-| A browser shows a CORS error | The caller's address is not allowed | Add it to `CORS_ORIGINS` and restart the backend |
+| "Staff sign-up is not open right now" | No invite code is set | Set `ADMIN_INVITE_CODE` and restart the backend |
+| The server stops with a message about `JWT_SECRET` | The secret is shorter than 32 characters | Use a longer secret |
 | Tests time out while starting | The computer is busy | Close other programs and run with fewer workers |
